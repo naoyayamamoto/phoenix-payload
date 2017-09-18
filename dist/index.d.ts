@@ -1,3 +1,10 @@
+export interface Payload<T> {
+    topic: string;
+    event: string;
+    payload: T;
+    ref: number;
+    join_ref: number;
+}
 export declare class PhoenixPayload {
     /**
      * The fully qualifed socket url
@@ -17,4 +24,14 @@ export declare class PhoenixPayload {
      * Add query parameter
      */
     private static appendParams(url, params?);
+    /**
+     * Join Payload
+     * @param  {string} topic
+     * @param  {any}    chanParams
+     * @return {string}
+     */
+    joinPayload(topic: string, chanParams?: {
+        [key: string]: any;
+    }): string;
+    private encode(msg);
 }

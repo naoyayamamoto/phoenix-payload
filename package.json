@@ -20,6 +20,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "rxjs": "^5.4.3",
     "source-map-loader": "^0.2.1",
     "ts-loader": "^2.3.7",
     "tslint": "^4.1.1",

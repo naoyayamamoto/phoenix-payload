@@ -1,6 +1,22 @@
 const VSN = '2.0.0';
 
-let ref: number = 0;
+let join_ref: number = 0;
+
+const CHANNEL_EVENTS = {
+    close: 'phx_close',
+    error: 'phx_error',
+    join: 'phx_join',
+    reply: 'phx_reply',
+    leave: 'phx_leave'
+};
+
+export interface Payload<T> {
+    topic: string;
+    event: string;
+    payload: T;
+    ref: number;
+    join_ref: number;
+}
 
 export class PhoenixPayload {
     /**
@@ -49,4 +65,45 @@ export class PhoenixPayload {
         const prefix = url.match(/\?/) ? '&' : '?';
         return `${url}${prefix}${this.serialize(params)}`;
     }
+
+    /**
+     * Join Payload
+     * @param  {string} topic
+     * @param  {any}    chanParams
+     * @return {string}
+     */
+    public joinPayload(topic: string, chanParams: {[key: string]: any} = {}): string {
+        join_ref++;
+        const param: Payload<{[key: string]: any}> = {
+            topic: topic,
+            event: CHANNEL_EVENTS.join,
+            payload: chanParams,
+            ref: 1,
+            join_ref: join_ref
+        };
+        return this.encode(param);
+    }
+
+    private encode(msg: Payload<any>) {
+        const payload = [
+            msg.join_ref, msg.ref, msg.topic, msg.event, msg.payload
+        ];
+        return JSON.stringify(payload);
+    },
 }
+
+
+// this.channel.socket.push({
+//     topic: this.channel.topic,
+//     event: this.event,
+//     payload: this.payload,
+//     ref: this.ref,
+//     join_ref: this.channel.joinRef()
+// });
+//
+// const { topic, event, payload, ref, join_ref } = data;
+// const callback = () => {
+//     this.encode(data, result => {
+//         this.conn.send(result);
+//     });
+// };
