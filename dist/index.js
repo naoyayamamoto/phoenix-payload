@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var VSN = '2.0.0';
+var ref = 0;
 var PhoenixPayload = (function () {
     function PhoenixPayload() {
     }

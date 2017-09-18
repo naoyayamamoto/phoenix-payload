@@ -1,5 +1,7 @@
 const VSN = '2.0.0';
 
+let ref: number = 0;
+
 export class PhoenixPayload {
     /**
      * The fully qualifed socket url
