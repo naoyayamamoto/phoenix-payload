@@ -32,6 +32,7 @@ module.exports = {
     // Configuration for dev server
     devServer: {
         contentBase: './demo/',
+        compress: true,
         port: 3000
     },
 };
