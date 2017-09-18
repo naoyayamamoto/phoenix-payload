@@ -1,3 +1,2 @@
 import {PhoenixPayload} from '../../dist';
-
-console.log(PhoenixPayload.endPointURL());
+// console.log(PhoenixPayload.endPointURL());

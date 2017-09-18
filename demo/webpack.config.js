@@ -3,7 +3,7 @@ module.exports = {
     entry: "./demo/src/index.ts",
     output: {
         filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: __dirname + "/"
     },
 
     devtool: "source-map",
@@ -31,8 +31,9 @@ module.exports = {
 
     // Configuration for dev server
     devServer: {
-        contentBase: './demo/',
+        contentBase: ['./demo/', './demo/dist/'],
         compress: true,
+        inline: true,
         port: 3000
     },
 };
