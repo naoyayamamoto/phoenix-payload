@@ -1,0 +1,23 @@
+{
+  "name": "phoenix-payload",
+  "version": "0.0.1",
+  "description": "Phoenix Framework Channel Payload",
+  "main": "./dist/index.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p ./",
+    "watch": "tsc -p ./ -w"
+  },
+  "keywords": [
+    "phoenix",
+    "phoenixframework",
+    "socket",
+    "websockets"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "tslint": "^4.1.1",
+    "typescript": "^2.4.2"
+  }
+}
