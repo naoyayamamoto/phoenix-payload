@@ -89,7 +89,7 @@ export class PhoenixPayload {
             msg.join_ref, msg.ref, msg.topic, msg.event, msg.payload
         ];
         return JSON.stringify(payload);
-    },
+    }
 }
 
 
