@@ -2,7 +2,7 @@ export declare class PhoenixPayload {
     /**
      * The fully qualifed socket url
      */
-    static endPointURL(url: string, params?: {
+    static endPointURL(url?: string, params?: {
         [key: string]: string | number;
     }): string;
     /**

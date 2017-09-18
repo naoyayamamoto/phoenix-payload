@@ -6,7 +6,7 @@ export class PhoenixPayload {
     /**
      * The fully qualifed socket url
      */
-    public static endPointURL(url: string, params: {[key: string]: string | number} = {}): string {
+    public static endPointURL(url: string = '/', params: {[key: string]: string | number} = {}): string {
         const uri = this.appendParams(
             this.appendParams(url, params), { vsn: VSN });
         if (uri.charAt(0) !== '/') { return uri; }

@@ -1,0 +1,21 @@
+{
+    "compileOnSave": true,
+    "files": [
+        "src/index.ts"
+    ],
+    "include": [
+        "../dist/**/*"
+    ],
+    "compilerOptions": {
+        "outDir": "./",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "target": "es5",
+        "strict": true,
+        "lib": [
+            "es2017",
+            "dom"
+        ]
+    }
+}

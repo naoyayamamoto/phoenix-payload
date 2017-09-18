@@ -9,6 +9,7 @@ var PhoenixPayload = (function () {
      * The fully qualifed socket url
      */
     PhoenixPayload.endPointURL = function (url, params) {
+        if (url === void 0) { url = '/'; }
         if (params === void 0) { params = {}; }
         var uri = this.appendParams(this.appendParams(url, params), { vsn: VSN });
         if (uri.charAt(0) !== '/') {
