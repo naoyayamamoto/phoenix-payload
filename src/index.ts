@@ -18,10 +18,9 @@ export interface Payload<T> {
 
 export class PhoenixPayload {
 
-    private ref: { [key: string]: {
-        ref: number;
-        join_ref: number;
-    }} = {};
+    private ref: number = 0;
+
+    private joinRef: { [key: string]: number} = {};
 
     /**
      * The fully qualifed socket url
@@ -77,16 +76,13 @@ export class PhoenixPayload {
      * @return {string}
      */
     public joinPayload(topic: string, chanParams: {[key: string]: any} = {}): string {
-        this.ref[topic] = {
-            ref: 1,
-            join_ref: 1
-        };
+        this.joinRef[topic] = 1 + Object.keys.length;
         const param: Payload<{[key: string]: any}> = {
             topic: topic,
             event: CHANNEL_EVENTS.join,
             payload: chanParams,
-            ref: this.ref[topic].ref,
-            join_ref: this.ref[topic].join_ref
+            ref: this.ref + 1,
+            join_ref: this.joinRef[topic]
         };
         return this.encode(param);
     }
@@ -106,18 +102,22 @@ export class PhoenixPayload {
      * @return {string}
      */
     public pushPayload(topic: string, event: string, payload: {[key: string]: any} = {}): string {
-        if (!this.ref[topic]) {
+        if (!this.joinRef[topic]) {
             throw Error(`tried to push '${event}' to '${topic}' before joining. Send joinPayload before pushing events`);
         }
         const param: Payload<{[key: string]: any}> = {
             topic: topic,
             event: event,
             payload: payload,
-            ref: this.ref[topic].ref + 1,
-            join_ref: this.ref[topic].join_ref
+            ref: this.ref + 1,
+            join_ref: this.joinRef[topic]
         };
         return this.encode(param);
     }
+
+    // public heartbeatPayload(): string {
+    //
+    // }
 }
 
 
