@@ -81,7 +81,7 @@ export class PhoenixPayload {
             topic: topic,
             event: CHANNEL_EVENTS.join,
             payload: chanParams,
-            ref: ref + 1,
+            ref: ref++,
             join_ref: joinRef[topic]
         };
         return this.encode(param);
@@ -109,7 +109,7 @@ export class PhoenixPayload {
             topic: topic,
             event: event,
             payload: payload,
-            ref: ref + 1,
+            ref: ref++,
             join_ref: joinRef[topic]
         };
         return this.encode(param);
@@ -124,7 +124,7 @@ export class PhoenixPayload {
             topic: 'phoenix',
             event: 'heartbeat',
             payload: {},
-            ref: ref + 1,
+            ref: ref++,
         });
     }
 }

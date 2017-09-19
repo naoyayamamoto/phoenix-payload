@@ -78,7 +78,7 @@ var PhoenixPayload = /** @class */ (function () {
             topic: topic,
             event: CHANNEL_EVENTS.join,
             payload: chanParams,
-            ref: ref + 1,
+            ref: ref++,
             join_ref: joinRef[topic]
         };
         return this.encode(param);
@@ -105,7 +105,7 @@ var PhoenixPayload = /** @class */ (function () {
             topic: topic,
             event: event,
             payload: payload,
-            ref: ref + 1,
+            ref: ref++,
             join_ref: joinRef[topic]
         };
         return this.encode(param);
@@ -119,7 +119,7 @@ var PhoenixPayload = /** @class */ (function () {
             topic: 'phoenix',
             event: 'heartbeat',
             payload: {},
-            ref: ref + 1,
+            ref: ref++,
         });
     };
     return PhoenixPayload;
