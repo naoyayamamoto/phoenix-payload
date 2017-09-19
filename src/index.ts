@@ -13,14 +13,14 @@ export interface Payload<T> {
     event: string;
     payload: T;
     ref: number;
-    join_ref: number;
+    join_ref?: number;
 }
 
+let ref: number = 0;
+
+let joinRef: { [key: string]: number} = {};
+
 export class PhoenixPayload {
-
-    private ref: number = 0;
-
-    private joinRef: { [key: string]: number} = {};
 
     /**
      * The fully qualifed socket url
@@ -70,24 +70,24 @@ export class PhoenixPayload {
     }
 
     /**
-     * Join Payload
+     * Join payload
      * @param  {string} topic
      * @param  {any}    chanParams
      * @return {string}
      */
-    public joinPayload(topic: string, chanParams: {[key: string]: any} = {}): string {
-        this.joinRef[topic] = 1 + Object.keys.length;
+    public static join(topic: string, chanParams: {[key: string]: any} = {}): string {
+        joinRef[topic] = 1 + Object.keys(joinRef).length;
         const param: Payload<{[key: string]: any}> = {
             topic: topic,
             event: CHANNEL_EVENTS.join,
             payload: chanParams,
-            ref: this.ref + 1,
-            join_ref: this.joinRef[topic]
+            ref: ref + 1,
+            join_ref: joinRef[topic]
         };
         return this.encode(param);
     }
 
-    private encode(msg: Payload<any>) {
+    private static encode(msg: Payload<any>) {
         const payload = [
             msg.join_ref, msg.ref, msg.topic, msg.event, msg.payload
         ];
@@ -95,43 +95,36 @@ export class PhoenixPayload {
     }
 
     /**
-     * Push Payload
+     * Push payload
      * @param  {string} topic
      * @param  {string} event
      * @param  {any}    payload
      * @return {string}
      */
-    public pushPayload(topic: string, event: string, payload: {[key: string]: any} = {}): string {
-        if (!this.joinRef[topic]) {
+    public static push(topic: string, event: string, payload: {[key: string]: any} = {}): string {
+        if (!joinRef[topic]) {
             throw Error(`tried to push '${event}' to '${topic}' before joining. Send joinPayload before pushing events`);
         }
         const param: Payload<{[key: string]: any}> = {
             topic: topic,
             event: event,
             payload: payload,
-            ref: this.ref + 1,
-            join_ref: this.joinRef[topic]
+            ref: ref + 1,
+            join_ref: joinRef[topic]
         };
         return this.encode(param);
     }
 
-    // public heartbeatPayload(): string {
-    //
-    // }
+    /**
+     * Heartbeat payload
+     * @return {string}
+     */
+    public static heartbeat(): string {
+        return this.encode({
+            topic: 'phoenix',
+            event: 'heartbeat',
+            payload: {},
+            ref: ref + 1,
+        });
+    }
 }
-
-
-// this.channel.socket.push({
-//     topic: this.channel.topic,
-//     event: this.event,
-//     payload: this.payload,
-//     ref: this.ref,
-//     join_ref: this.channel.joinRef()
-// });
-//
-// const { topic, event, payload, ref, join_ref } = data;
-// const callback = () => {
-//     this.encode(data, result => {
-//         this.conn.send(result);
-//     });
-// };

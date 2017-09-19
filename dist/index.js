@@ -8,13 +8,10 @@ var CHANNEL_EVENTS = {
     reply: 'phx_reply',
     leave: 'phx_leave'
 };
+var ref = 0;
+var joinRef = {};
 var PhoenixPayload = /** @class */ (function () {
     function PhoenixPayload() {
-        this.ref = 0;
-        this.joinRef = {};
-        // public heartbeatPayload(): string {
-        //
-        // }
     }
     /**
      * The fully qualifed socket url
@@ -69,65 +66,63 @@ var PhoenixPayload = /** @class */ (function () {
         return "" + url + prefix + this.serialize(params);
     };
     /**
-     * Join Payload
+     * Join payload
      * @param  {string} topic
      * @param  {any}    chanParams
      * @return {string}
      */
-    PhoenixPayload.prototype.joinPayload = function (topic, chanParams) {
+    PhoenixPayload.join = function (topic, chanParams) {
         if (chanParams === void 0) { chanParams = {}; }
-        this.joinRef[topic] = 1 + Object.keys.length;
+        joinRef[topic] = 1 + Object.keys(joinRef).length;
         var param = {
             topic: topic,
             event: CHANNEL_EVENTS.join,
             payload: chanParams,
-            ref: this.ref + 1,
-            join_ref: this.joinRef[topic]
+            ref: ref + 1,
+            join_ref: joinRef[topic]
         };
         return this.encode(param);
     };
-    PhoenixPayload.prototype.encode = function (msg) {
+    PhoenixPayload.encode = function (msg) {
         var payload = [
             msg.join_ref, msg.ref, msg.topic, msg.event, msg.payload
         ];
         return JSON.stringify(payload);
     };
     /**
-     * Push Payload
+     * Push payload
      * @param  {string} topic
      * @param  {string} event
      * @param  {any}    payload
      * @return {string}
      */
-    PhoenixPayload.prototype.pushPayload = function (topic, event, payload) {
+    PhoenixPayload.push = function (topic, event, payload) {
         if (payload === void 0) { payload = {}; }
-        if (!this.joinRef[topic]) {
+        if (!joinRef[topic]) {
             throw Error("tried to push '" + event + "' to '" + topic + "' before joining. Send joinPayload before pushing events");
         }
         var param = {
             topic: topic,
             event: event,
             payload: payload,
-            ref: this.ref + 1,
-            join_ref: this.joinRef[topic]
+            ref: ref + 1,
+            join_ref: joinRef[topic]
         };
         return this.encode(param);
+    };
+    /**
+     * Heartbeat payload
+     * @return {string}
+     */
+    PhoenixPayload.heartbeat = function () {
+        return this.encode({
+            topic: 'phoenix',
+            event: 'heartbeat',
+            payload: {},
+            ref: ref + 1,
+        });
     };
     return PhoenixPayload;
 }());
 exports.PhoenixPayload = PhoenixPayload;
-// this.channel.socket.push({
-//     topic: this.channel.topic,
-//     event: this.event,
-//     payload: this.payload,
-//     ref: this.ref,
-//     join_ref: this.channel.joinRef()
-// });
-//
-// const { topic, event, payload, ref, join_ref } = data;
-// const callback = () => {
-//     this.encode(data, result => {
-//         this.conn.send(result);
-//     });
-// };
 //# sourceMappingURL=index.js.map

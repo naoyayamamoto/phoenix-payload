@@ -3,11 +3,9 @@ export interface Payload<T> {
     event: string;
     payload: T;
     ref: number;
-    join_ref: number;
+    join_ref?: number;
 }
 export declare class PhoenixPayload {
-    private ref;
-    private joinRef;
     /**
      * The fully qualifed socket url
      */
@@ -27,23 +25,28 @@ export declare class PhoenixPayload {
      */
     private static appendParams(url, params?);
     /**
-     * Join Payload
+     * Join payload
      * @param  {string} topic
      * @param  {any}    chanParams
      * @return {string}
      */
-    joinPayload(topic: string, chanParams?: {
+    static join(topic: string, chanParams?: {
         [key: string]: any;
     }): string;
-    private encode(msg);
+    private static encode(msg);
     /**
-     * Push Payload
+     * Push payload
      * @param  {string} topic
      * @param  {string} event
      * @param  {any}    payload
      * @return {string}
      */
-    pushPayload(topic: string, event: string, payload?: {
+    static push(topic: string, event: string, payload?: {
         [key: string]: any;
     }): string;
+    /**
+     * Heartbeat payload
+     * @return {string}
+     */
+    static heartbeat(): string;
 }
