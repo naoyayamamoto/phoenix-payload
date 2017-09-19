@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var VSN = '2.0.0';
-var join_ref = 0;
 var CHANNEL_EVENTS = {
     close: 'phx_close',
     error: 'phx_error',
@@ -11,6 +10,7 @@ var CHANNEL_EVENTS = {
 };
 var PhoenixPayload = (function () {
     function PhoenixPayload() {
+        this.ref = {};
     }
     /**
      * The fully qualifed socket url
@@ -71,13 +71,16 @@ var PhoenixPayload = (function () {
      */
     PhoenixPayload.prototype.joinPayload = function (topic, chanParams) {
         if (chanParams === void 0) { chanParams = {}; }
-        join_ref++;
+        this.ref[topic] = {
+            ref: 1,
+            join_ref: 1
+        };
         var param = {
             topic: topic,
             event: CHANNEL_EVENTS.join,
             payload: chanParams,
-            ref: 1,
-            join_ref: join_ref
+            ref: this.ref[topic].ref,
+            join_ref: this.ref[topic].join_ref
         };
         return this.encode(param);
     };

@@ -1,7 +1,5 @@
 const VSN = '2.0.0';
 
-let join_ref: number = 0;
-
 const CHANNEL_EVENTS = {
     close: 'phx_close',
     error: 'phx_error',
@@ -19,6 +17,12 @@ export interface Payload<T> {
 }
 
 export class PhoenixPayload {
+
+    private ref: { [key: string]: {
+        ref: number;
+        join_ref: number;
+    }} = {};
+
     /**
      * The fully qualifed socket url
      */
@@ -73,13 +77,16 @@ export class PhoenixPayload {
      * @return {string}
      */
     public joinPayload(topic: string, chanParams: {[key: string]: any} = {}): string {
-        join_ref++;
+        this.ref[topic] = {
+            ref: 1,
+            join_ref: 1
+        };
         const param: Payload<{[key: string]: any}> = {
             topic: topic,
             event: CHANNEL_EVENTS.join,
             payload: chanParams,
-            ref: 1,
-            join_ref: join_ref
+            ref: this.ref[topic].ref,
+            join_ref: this.ref[topic].join_ref
         };
         return this.encode(param);
     }
