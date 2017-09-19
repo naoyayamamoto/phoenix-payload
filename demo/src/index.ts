@@ -20,4 +20,11 @@ subject.subscribe(
     }
 );
 
+/**
+ * Join
+ */
 subject.next(phoenixPayload.joinPayload('room:lobby'));
+/**
+ * Send Payload
+ */
+subject.next(phoenixPayload.pushPayload('room:lobby', 'new_msg', {body: 1234}));

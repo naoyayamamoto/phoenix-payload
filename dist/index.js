@@ -100,7 +100,7 @@ var PhoenixPayload = /** @class */ (function () {
      */
     PhoenixPayload.prototype.pushPayload = function (topic, event, payload) {
         if (payload === void 0) { payload = {}; }
-        if (this.ref[topic]) {
+        if (!this.ref[topic]) {
             throw Error("tried to push '" + event + "' to '" + topic + "' before joining. Send joinPayload before pushing events");
         }
         var param = {

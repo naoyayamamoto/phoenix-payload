@@ -106,7 +106,7 @@ export class PhoenixPayload {
      * @return {string}
      */
     public pushPayload(topic: string, event: string, payload: {[key: string]: any} = {}): string {
-        if (this.ref[topic]) {
+        if (!this.ref[topic]) {
             throw Error(`tried to push '${event}' to '${topic}' before joining. Send joinPayload before pushing events`);
         }
         const param: Payload<{[key: string]: any}> = {
