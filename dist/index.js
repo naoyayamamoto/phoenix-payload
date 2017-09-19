@@ -91,6 +91,27 @@ var PhoenixPayload = /** @class */ (function () {
         ];
         return JSON.stringify(payload);
     };
+    /**
+     * Push Payload
+     * @param  {string} topic
+     * @param  {string} event
+     * @param  {any}    payload
+     * @return {string}
+     */
+    PhoenixPayload.prototype.pushPayload = function (topic, event, payload) {
+        if (payload === void 0) { payload = {}; }
+        if (this.ref[topic]) {
+            throw Error("tried to push '" + event + "' to '" + topic + "' before joining. Send joinPayload before pushing events");
+        }
+        var param = {
+            topic: topic,
+            event: event,
+            payload: payload,
+            ref: this.ref[topic].ref + 1,
+            join_ref: this.ref[topic].join_ref
+        };
+        return this.encode(param);
+    };
     return PhoenixPayload;
 }());
 exports.PhoenixPayload = PhoenixPayload;

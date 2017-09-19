@@ -35,4 +35,14 @@ export declare class PhoenixPayload {
         [key: string]: any;
     }): string;
     private encode(msg);
+    /**
+     * Push Payload
+     * @param  {string} topic
+     * @param  {string} event
+     * @param  {any}    payload
+     * @return {string}
+     */
+    pushPayload(topic: string, event: string, payload?: {
+        [key: string]: any;
+    }): string;
 }

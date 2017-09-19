@@ -97,6 +97,27 @@ export class PhoenixPayload {
         ];
         return JSON.stringify(payload);
     }
+
+    /**
+     * Push Payload
+     * @param  {string} topic
+     * @param  {string} event
+     * @param  {any}    payload
+     * @return {string}
+     */
+    public pushPayload(topic: string, event: string, payload: {[key: string]: any} = {}): string {
+        if (this.ref[topic]) {
+            throw Error(`tried to push '${event}' to '${topic}' before joining. Send joinPayload before pushing events`);
+        }
+        const param: Payload<{[key: string]: any}> = {
+            topic: topic,
+            event: event,
+            payload: payload,
+            ref: this.ref[topic].ref + 1,
+            join_ref: this.ref[topic].join_ref
+        };
+        return this.encode(param);
+    }
 }
 
 
