@@ -6,6 +6,7 @@ export interface Payload<T> {
     join_ref: number;
 }
 export declare class PhoenixPayload {
+    private ref;
     /**
      * The fully qualifed socket url
      */
