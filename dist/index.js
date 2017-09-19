@@ -9,7 +9,7 @@ var CHANNEL_EVENTS = {
     reply: 'phx_reply',
     leave: 'phx_leave'
 };
-var PhoenixPayload = (function () {
+var PhoenixPayload = /** @class */ (function () {
     function PhoenixPayload() {
     }
     /**
@@ -57,6 +57,7 @@ var PhoenixPayload = (function () {
      * Add query parameter
      */
     PhoenixPayload.appendParams = function (url, params) {
+        if (params === void 0) { params = {}; }
         if (Object.keys(params).length === 0) {
             return url;
         }

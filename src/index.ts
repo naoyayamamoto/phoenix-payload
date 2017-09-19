@@ -59,7 +59,7 @@ export class PhoenixPayload {
     /**
      * Add query parameter
      */
-    private static appendParams(url: string, params?: {[key: string]: string | number}): string {
+    private static appendParams(url: string, params: {[key: string]: string | number} = {}): string {
         if (Object.keys(params).length === 0) { return url; }
 
         const prefix = url.match(/\?/) ? '&' : '?';
