@@ -70,6 +70,28 @@ export class PhoenixPayload {
     }
 
     /**
+     * Encode Phoenix Payload
+     * @param  {Payload<any>} msg
+     * @return {string}
+     */
+    public static encode(msg: Payload<any>): string {
+        const payload = [
+            msg.join_ref, msg.ref, msg.topic, msg.event, msg.payload
+        ];
+        return JSON.stringify(payload);
+    }
+    /**
+     * Decode Phoenix Payload
+     * @param  {any}          msg
+     * @return {Payload<any>}
+     */
+    public static decode(msg: any): Payload<any>
+    public static decode<T>(msg: any): Payload<T> {
+        const [join_ref, ref, topic, event, payload] = msg;
+        return { join_ref, ref, topic, event, payload };
+    }
+
+    /**
      * Join payload
      * @param  {string} topic
      * @param  {any}    chanParams
@@ -85,13 +107,6 @@ export class PhoenixPayload {
             join_ref: joinRef[topic]
         };
         return this.encode(param);
-    }
-
-    private static encode(msg: Payload<any>) {
-        const payload = [
-            msg.join_ref, msg.ref, msg.topic, msg.event, msg.payload
-        ];
-        return JSON.stringify(payload);
     }
 
     /**
@@ -126,5 +141,19 @@ export class PhoenixPayload {
             payload: {},
             ref: ref++,
         });
+    }
+
+    /**
+     * Leave payload
+     * @return {string}
+     */
+    public static leave(topic: string): string {
+        const param: Payload<{}> = {
+            topic: topic,
+            event: CHANNEL_EVENTS.leave,
+            payload: {},
+            ref: ref++
+        };
+        return this.encode(param);
     }
 }

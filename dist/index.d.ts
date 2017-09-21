@@ -25,6 +25,18 @@ export declare class PhoenixPayload {
      */
     private static appendParams(url, params?);
     /**
+     * Encode Phoenix Payload
+     * @param  {Payload<any>} msg
+     * @return {string}
+     */
+    static encode(msg: Payload<any>): string;
+    /**
+     * Decode Phoenix Payload
+     * @param  {any}          msg
+     * @return {Payload<any>}
+     */
+    static decode(msg: any): Payload<any>;
+    /**
      * Join payload
      * @param  {string} topic
      * @param  {any}    chanParams
@@ -33,7 +45,6 @@ export declare class PhoenixPayload {
     static join(topic: string, chanParams?: {
         [key: string]: any;
     }): string;
-    private static encode(msg);
     /**
      * Push payload
      * @param  {string} topic
@@ -49,4 +60,9 @@ export declare class PhoenixPayload {
      * @return {string}
      */
     static heartbeat(): string;
+    /**
+     * Leave payload
+     * @return {string}
+     */
+    static leave(topic: string): string;
 }

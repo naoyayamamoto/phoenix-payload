@@ -66,6 +66,21 @@ var PhoenixPayload = /** @class */ (function () {
         return "" + url + prefix + this.serialize(params);
     };
     /**
+     * Encode Phoenix Payload
+     * @param  {Payload<any>} msg
+     * @return {string}
+     */
+    PhoenixPayload.encode = function (msg) {
+        var payload = [
+            msg.join_ref, msg.ref, msg.topic, msg.event, msg.payload
+        ];
+        return JSON.stringify(payload);
+    };
+    PhoenixPayload.decode = function (msg) {
+        var join_ref = msg[0], ref = msg[1], topic = msg[2], event = msg[3], payload = msg[4];
+        return { join_ref: join_ref, ref: ref, topic: topic, event: event, payload: payload };
+    };
+    /**
      * Join payload
      * @param  {string} topic
      * @param  {any}    chanParams
@@ -82,12 +97,6 @@ var PhoenixPayload = /** @class */ (function () {
             join_ref: joinRef[topic]
         };
         return this.encode(param);
-    };
-    PhoenixPayload.encode = function (msg) {
-        var payload = [
-            msg.join_ref, msg.ref, msg.topic, msg.event, msg.payload
-        ];
-        return JSON.stringify(payload);
     };
     /**
      * Push payload
@@ -121,6 +130,19 @@ var PhoenixPayload = /** @class */ (function () {
             payload: {},
             ref: ref++,
         });
+    };
+    /**
+     * Leave payload
+     * @return {string}
+     */
+    PhoenixPayload.leave = function (topic) {
+        var param = {
+            topic: topic,
+            event: CHANNEL_EVENTS.leave,
+            payload: {},
+            ref: ref++
+        };
+        return this.encode(param);
     };
     return PhoenixPayload;
 }());

@@ -1,17 +1,17 @@
-import {PhoenixPayload} from '../../dist';
+import {PhoenixPayload, Payload} from '../../dist';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {WebSocketSubject, WebSocketSubjectConfig} from 'rxjs/observable/dom/WebSocketSubject';
 import 'rxjs/add/observable/dom/webSocket';
 import 'rxjs/add/observable/interval';
 
-let subject = Observable.webSocket<any>(
+let subject = Observable.webSocket(
     PhoenixPayload.endPointURL('ws://localhost:4000/socket/websocket', {token: 1234})
 );
 let heartbeatSubject: Subscription;
 subject.subscribe(
     (ret) => {
-        console.log(ret);
+        console.log(PhoenixPayload.decode(ret));
     },
     (error) => {
         console.log(error);
@@ -38,3 +38,7 @@ heartbeatSubject = Observable.interval(30000).subscribe(
         subject.next(PhoenixPayload.heartbeat());
     }
 );
+setTimeout(() => {
+    subject.next(PhoenixPayload.leave('room:lobby'));
+    heartbeatSubject.unsubscribe();
+}, 100000);
