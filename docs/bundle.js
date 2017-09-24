@@ -1375,10 +1375,11 @@ var dist_1 = __webpack_require__(16);
 var Observable_1 = __webpack_require__(0);
 __webpack_require__(22);
 __webpack_require__(34);
-var subject = Observable_1.Observable.webSocket(dist_1.PhoenixPayload.endPointURL('ws://localhost:4000/socket/websocket', { token: 1234 }));
+var subject = Observable_1.Observable.webSocket(dist_1.PhoenixPayload.endPointURL('wss://enigmatic-reef-47155.herokuapp.com/socket/websocket', { token: 1234 }));
 var heartbeatSubject;
+var chat;
 subject.subscribe(function (ret) {
-    console.log(dist_1.PhoenixPayload.decode(ret));
+    chat(dist_1.PhoenixPayload.decode(ret));
 }, function (error) {
     console.log(error);
     heartbeatSubject.unsubscribe();
@@ -1392,17 +1393,44 @@ subject.next(dist_1.PhoenixPayload.join('room:lobby'));
 /**
  * Send Push
  */
-subject.next(dist_1.PhoenixPayload.push('room:lobby', 'new_msg', { body: 1234 }));
+// subject.next(PhoenixPayload.push('room:lobby', 'shout', {body: 1234}));
 /**
  * Send Heartbeat
  */
 heartbeatSubject = Observable_1.Observable.interval(30000).subscribe(function () {
     subject.next(dist_1.PhoenixPayload.heartbeat());
 });
-setTimeout(function () {
-    subject.next(dist_1.PhoenixPayload.leave('room:lobby'));
-    heartbeatSubject.unsubscribe();
-}, 100000);
+window.addEventListener('load', function () {
+    var $input = document.getElementById('message-input');
+    var $username = document.getElementById('username');
+    var $messages = document.getElementById('messages');
+    $input.addEventListener('keypress', function (e) {
+        if (e.keyCode === 13) {
+            subject.next(dist_1.PhoenixPayload.push('room:lobby', 'shout', {
+                user: $username.value,
+                body: $input.value
+            }));
+            $input.value = "";
+        }
+    });
+    chat = function (payload) {
+        console.log(payload);
+        if (payload.event === 'shout') {
+            $messages.appendChild(messageTemplate(payload.payload));
+            scrollTo(0, document.body.scrollHeight);
+        }
+    };
+    var sanitize = function (html) {
+        return html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    };
+    var messageTemplate = function (msg) {
+        var username = sanitize(msg.user || "anonymous");
+        var body = sanitize(msg.body);
+        var p = document.createElement('p');
+        p.innerHTML = "<a href='#'>[" + username + "]</a>&nbsp; " + body;
+        return p;
+    };
+});
 
 
 /***/ }),
