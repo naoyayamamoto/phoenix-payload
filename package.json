@@ -1,6 +1,6 @@
 {
     "name": "phoenix-payload",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Phoenix Framework Channel Payload",
     "main": "./dist/index.js",
     "repository": {
