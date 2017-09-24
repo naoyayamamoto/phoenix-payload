@@ -7,8 +7,8 @@
   "scripts": {
     "build": "tsc -p ./",
     "watch": "tsc -p ./ -w",
-    "demo": "webpack --config ./demo/webpack.config.js",
-    "demo:serve": "webpack-dev-server --config ./demo/webpack.config.js"
+    "demo": "webpack --config ./docs/webpack.config.js",
+    "demo:serve": "webpack-dev-server --config ./docs/webpack.config.js"
   },
   "keywords": [
     "phoenix",

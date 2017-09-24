@@ -1,6 +1,6 @@
 var path = require('path');
 module.exports = {
-    entry: "./demo/src/index.ts",
+    entry: "./docs/src/index.ts",
     output: {
         filename: "bundle.js",
         path: __dirname + "/"
@@ -31,7 +31,7 @@ module.exports = {
 
     // Configuration for dev server
     devServer: {
-        contentBase: ['./demo/', './demo/dist/'],
+        contentBase: ['./docs/', './docs/dist/'],
         compress: true,
         inline: true,
         port: 3000
